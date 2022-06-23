@@ -15,11 +15,21 @@ class Main extends Component {
       staffs: STAFFS,
       selectedStaff: null,
     };
+    this.addStaff = this.addStaff.bind(this);
   }
 
   onStaffSelect(staffID) {
     this.setState({ selectedStaff: staffID });
   }
+  addStaff = (staff) => {
+    const id = Math.floor(Math.random() * 10000 + 1);
+    const newStaff = { id, ...staff };
+    this.setState({
+      staffs: [...this.state.staffs, newStaff],
+    });
+    console.log(newStaff);
+    console.log(this.state.staffs);
+  };
 
   render() {
     const StaffsID = ({ match }) => {
@@ -46,6 +56,13 @@ class Main extends Component {
                 staffs={this.state.staffs}
                 onClick={(staffID) => this.onStaffSelect(staffID)}
               />
+            )}
+          />
+          <Route
+            exact
+            path="/staff"
+            component={() => (
+              <StaffDetail onAdd={this.addStaff} staffs={this.state.staffs} />
             )}
           />
           <Route exact path="/department" component={Department} />
