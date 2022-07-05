@@ -1,18 +1,32 @@
 import React, { Component } from "react";
-import { STAFFS } from "../shared/staffs";
+import { DEPARTMENTS, STAFFS } from "../shared/staffs";
 import Footer from "./FooterComponent";
 import Header from "./HeaderComponent";
 import Menu from "./MenuComponent";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import Salary from "./SalaryComponent";
 import Department from "./DepartmentComponent";
 import StaffDetail from "./StaffItemComponent";
+import { connect } from "react-redux";
 
+const mapStateToProps = (state) => {
+  return {
+    staffs: state.staffs,
+    departments: state.departments,
+    role: state.role,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  // addComment: (dishId, rating, author, comment) =>
+  //   dispatch(addComment(dishId, rating, author, comment)),
+});
 class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
       staffs: STAFFS,
+      departments: DEPARTMENTS,
       selectedStaff: null,
     };
     this.addStaff = this.addStaff.bind(this);
@@ -58,13 +72,13 @@ class Main extends Component {
               />
             )}
           />
-          <Route
+          {/* <Route
             exact
             path="/staff"
             component={() => (
               <StaffDetail onAdd={this.addStaff} staffs={this.state.staffs} />
             )}
-          />
+          /> */}
           <Route exact path="/department" component={Department} />
           <Route exact path="/staff/:staffID" component={StaffsID} />
           <Route exact path="/salary" component={Salary} />
@@ -75,4 +89,4 @@ class Main extends Component {
     );
   }
 }
-export default Main;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

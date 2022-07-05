@@ -28,7 +28,6 @@ class Menu extends Component {
     super(props);
     this.state = {
       staffs: STAFFS,
-      selectedStaff: null,
       name: "",
       doB: "",
       salaryScale: 1,
@@ -51,7 +50,7 @@ class Menu extends Component {
       modalOpen: false,
     };
 
-    this.handleSearch = this.handleSearch.bind(this);
+    // this.handleSearch = this.handleSearch.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
@@ -78,7 +77,8 @@ class Menu extends Component {
     });
   }
 
-  handleSubmit = (value) => {
+  handleSubmit = (event) => {
+    event.preventDefault();
     const newStaff = {
       name: this.state.name,
       doB: this.state.doB,
@@ -89,11 +89,8 @@ class Menu extends Component {
       overTime: this.state.overTime,
       image: "/assets/images/alberto.png",
     };
-    if (!this.state.doB || !this.state.startDate)
-      this.setState({
-        touched: { doB: true, startDate: true },
-      });
-    else this.props.onAdd(newStaff);
+
+    this.props.onAdd(newStaff);
   };
 
   validate(
@@ -115,41 +112,30 @@ class Menu extends Component {
       startDate: "",
     };
     if (this.state.touched.name && name.length < 3)
-      errors.name = "Tên phải lớn hơn 3 kí tự !";
+      errors.name = "Nhập tên nhân viên !";
     else if (this.state.touched.name && name.length > 50)
-      errors.name = "Tên phải nhỏ hơn 50 kí tự !";
-    else if (this.state.touched.department && department.length < 1)
-      errors.department = "Vui lòng nhập phòng ban !";
+      errors.name = "Nhập tên nhân viên !";
+    if (this.state.touched.department && department.length < 1)
+      errors.department = "Nhập phòng ban !";
+    if (this.state.touched.startDate && startDate.length < 1)
+      errors.startDate = "Nhập ngày bắt đầu làm việc !";
+    if (this.state.touched.doB && doB.length < 1) errors.doB = "Nhập ngày sinh";
+    if (this.state.touched.salaryScale && salaryScale.length < 1)
+      errors.salaryScale = "Nhập hệ số lương!";
+    if (this.state.touched.annualLeave && annualLeave.length < 1)
+      errors.annualLeave = "Nhập số ngày nghỉ còn lại !";
+    if (this.state.touched.overTime && overTime.length < 1)
+      errors.overTime = "Nhập số giờ tăng ca !";
 
-    const reg = /^\d+$/;
-    if (
-      this.state.touched.salaryScale &&
-      !reg.test(salaryScale) &&
-      salaryScale.length < 1
-    )
-      errors.salaryScale = "Vui lòng nhập hệ số lương là số !";
-    else if (
-      this.state.touched.annualLeave &&
-      !reg.test(annualLeave) &&
-      annualLeave.length < 1
-    )
-      errors.annualLeave = "Vui lòng nhập số ngày nghỉ còn lại !";
-    else if (
-      this.state.touched.overTime &&
-      !reg.test(overTime) &&
-      overTime.length < 1
-    )
-      errors.overTime = "Vui lòng nhập số giờ tăng ca !";
-    else if (this.state.touched.startDate)
-      errors.startDate = "Vui lòng nhập ngày bắt đầu làm việc !";
-    else if (this.state.touched.doB) errors.doB = "Vui lòng nhập ngày sinh";
     return errors;
   }
 
-  handleSearch(event) {
-    event.preventDefault();
-    this.setState({ strSearch: event.target.value });
-  }
+  // handleSearch(event) {
+  //   event.preventDefault();
+  //   const strSearchs = this.state.strSearch;
+  //   // this.setState(strSearch);
+  //   console.log(strSearchs);
+  // }
   handleChange(event) {
     this.setState({ strSearch: event.target.value });
   }
@@ -167,15 +153,13 @@ class Menu extends Component {
     const menu = this.state.staffs
       .filter((data) => {
         if (this.state.strSearch === "") return data;
-        else if (
-          data.name.toLowerCase().includes(this.state.strSearch.toLowerCase())
-        )
+        else if (data.name.toLowerCase().includes(this.state.strSearch))
           return data;
       })
       .map((data) => {
         return (
           <div className="col-6 col-md-4 col-xl-2 mb-5" key={data.id}>
-            {/* <RenderStaff staffs={this.state.staffs} /> */}
+            {/* <StaffDetail staffs={data} /> */}
             <Card onClick={() => this.props.onClick(data.id)}>
               <NavLink className="nav-link" to={`/staff/${data.id}`}>
                 <CardImg
@@ -198,7 +182,6 @@ class Menu extends Component {
             <h3>Nhân viên</h3>
           </div>
           <div className="col-8 mt-2">
-            {/* <form className="form-group row"> */}
             <form className="form-group row" onSubmit={this.handleSearch}>
               <div className="col-6">
                 <input
@@ -211,13 +194,13 @@ class Menu extends Component {
               </div>
 
               <div className="col-3">
-                <button
+                {/* <button
                   onClick={this.handleSearch}
                   className="btn btn-success"
                   type="submit"
                 >
                   Search
-                </button>
+                </button> */}
               </div>
               <div className="col-3">
                 <Button outline onClick={this.toggleModal}>
@@ -228,7 +211,7 @@ class Menu extends Component {
                     Thêm nhân viên
                   </ModalHeader>
                   <ModalBody>
-                    <Form onSubmit={this.handleSubmit}>
+                    <Form onSubmit={(value) => this.handleSubmit(value)}>
                       <Row className="control-group">
                         <Label htmlFor="name" md={4}>
                           Họ tên:
@@ -240,7 +223,8 @@ class Menu extends Component {
                             id="name"
                             name="name"
                             value={this.state.name}
-                            invalid={errors.name === ""}
+                            valid={errors.name === ""}
+                            invalid={errors.name !== ""}
                             onBlur={this.handleBlur("name")}
                             onChange={this.handleInput}
                           />
@@ -257,8 +241,10 @@ class Menu extends Component {
                             className="form-control mt-2"
                             id="doB"
                             name="doB"
+                            // value={this.state.tenState}
                             value={this.state.doB}
-                            invalid={errors.doB === ""}
+                            valid={errors.doB === ""}
+                            invalid={errors.doB !== ""}
                             onBlur={this.handleBlur("doB")}
                             onChange={this.handleInput}
                           />
@@ -276,7 +262,9 @@ class Menu extends Component {
                             id="startDate"
                             name="startDate"
                             value={this.state.startDate}
-                            invalid={errors.startDate === ""}
+                            // value={this.state.tenState.startDate}
+                            valid={errors.startDate === ""}
+                            invalid={errors.startDate !== ""}
                             onBlur={this.handleBlur("startDate")}
                             onChange={this.handleInput}
                           />
@@ -295,7 +283,8 @@ class Menu extends Component {
                             className="form-control mt-2"
                             value={this.state.department}
                             name="department"
-                            invalid={errors.department === ""}
+                            valid={errors.department === ""}
+                            invalid={errors.department !== ""}
                             onBlur={this.handleBlur("department")}
                             onChange={this.handleInput}
                             defaultValue="Sale"
@@ -309,36 +298,60 @@ class Menu extends Component {
                           <FormFeedback>{errors.department}</FormFeedback>
                         </Col>
                       </Row>
+
+                      <Row className="control-group mt-2">
+                        <Label htmlFor="salaryScale" md={4}>
+                          Hệ số lương:
+                        </Label>
+                        <Col md={8}>
+                          <Input
+                            type="number"
+                            className="form-control mt-2"
+                            id="salaryScale"
+                            name="salaryScale"
+                            value={this.state.salaryScale}
+                            valid={errors.salaryScale === ""}
+                            invalid={errors.salaryScale !== ""}
+                            onBlur={this.handleBlur("salaryScale")}
+                            onChange={this.handleInput}
+                          />
+                          <FormFeedback>{errors.salaryScale}</FormFeedback>
+                        </Col>
+                      </Row>
+
                       <Row className="control-group mt-2">
                         <Label htmlFor="annualLeave" md={4}>
                           Số ngày nghỉ còn lại:
                         </Label>
                         <Col md={8}>
                           <Input
-                            type="text"
+                            type="number"
                             className="form-control mt-2"
                             id="annualLeave"
                             name="annualLeave"
                             value={this.state.annualLeave}
-                            invalid={errors.annualLeave === ""}
+                            valid={errors.annualLeave === ""}
+                            invalid={errors.annualLeave !== ""}
                             onBlur={this.handleBlur("annualLeave")}
                             onChange={this.handleInput}
                           />
                           <FormFeedback>{errors.annualLeave}</FormFeedback>
                         </Col>
                       </Row>
+
                       <Row className="control-group">
                         <Label htmlFor="overTime" md={4}>
                           Số ngày tăng ca:
                         </Label>
                         <Col md={8}>
                           <Input
-                            type="text"
+                            type="number"
                             className="form-control mt-2"
                             id="overTime"
                             name="overTime"
                             value={this.state.overTime}
-                            invalid={errors.overTime === ""}
+                            valid={errors.overTime === ""}
+                            invalid={errors.overTime !== ""}
                             onBlur={this.handleBlur("overTime")}
                             onChange={this.handleInput}
                           />
