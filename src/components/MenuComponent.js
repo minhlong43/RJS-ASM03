@@ -14,20 +14,18 @@ import {
   FormFeedback,
   Row,
 } from "reactstrap";
-import { STAFFS } from "../shared/staffs";
+import { STAFFS, DEPARTMENTS } from "../shared/staffs";
 import { NavLink } from "react-router-dom";
 import { LocalForm, Control, Errors } from "react-redux-form";
-
-// const isNumber = (val) => !isNaN(Number(val));
-// const required = (val) => val && val.length;
-// const maxLength = (len) => (val) => !val || val.length <= len;
-// const minLength = (len) => (val) => val && val.length >= len;
+import { addStaff } from "../redux/Action";
 
 class Menu extends Component {
   constructor(props) {
     super(props);
     this.state = {
       staffs: STAFFS,
+      departments: DEPARTMENTS,
+      selectedStaff: null,
       name: "",
       doB: "",
       salaryScale: 1,
@@ -55,6 +53,7 @@ class Menu extends Component {
     this.handleBlur = this.handleBlur.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handleInput = this.handleInput.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   toggleModal() {
@@ -90,8 +89,23 @@ class Menu extends Component {
       image: "/assets/images/alberto.png",
     };
 
-    this.props.onAdd(newStaff);
+    this.props.addStaff(newStaff);
   };
+
+  // handleSubmit(event) {
+  //   event.preventDefault();
+  //   this.toggleModal();
+  //   this.props.addStaff(
+  //     this.props.id,
+  //     this.state.name,
+  //     this.state.department,
+  //     this.state.salaryScale,
+  //     this.state.doB,
+  //     this.state.startDate,
+  //     this.state.annualLeave,
+  //     this.state.overTime
+  //   );
+  // }
 
   validate(
     name,
@@ -122,9 +136,9 @@ class Menu extends Component {
     if (this.state.touched.doB && doB.length < 1) errors.doB = "Nhập ngày sinh";
     if (this.state.touched.salaryScale && salaryScale.length < 1)
       errors.salaryScale = "Nhập hệ số lương!";
-    if (this.state.touched.annualLeave && annualLeave.length < 1)
+    if (this.state.touched.annualLeave && annualLeave.length < 0)
       errors.annualLeave = "Nhập số ngày nghỉ còn lại !";
-    if (this.state.touched.overTime && overTime.length < 1)
+    if (this.state.touched.overTime && overTime.length < 0)
       errors.overTime = "Nhập số giờ tăng ca !";
 
     return errors;
@@ -212,6 +226,7 @@ class Menu extends Component {
                   </ModalHeader>
                   <ModalBody>
                     <Form onSubmit={(value) => this.handleSubmit(value)}>
+                      {/* <Form> */}
                       <Row className="control-group">
                         <Label htmlFor="name" md={4}>
                           Họ tên:
@@ -241,7 +256,6 @@ class Menu extends Component {
                             className="form-control mt-2"
                             id="doB"
                             name="doB"
-                            // value={this.state.tenState}
                             value={this.state.doB}
                             valid={errors.doB === ""}
                             invalid={errors.doB !== ""}
@@ -358,7 +372,7 @@ class Menu extends Component {
                           <FormFeedback>{errors.overTime}</FormFeedback>
                         </Col>
                       </Row>
-                      <Button type="submit" value="submit" color="primary">
+                      <Button type="submit" color="primary">
                         Thêm
                       </Button>
                     </Form>

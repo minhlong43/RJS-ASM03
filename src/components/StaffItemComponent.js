@@ -61,4 +61,5 @@ function StaffItem(data) {
     return <div></div>;
   }
 }
+
 export default StaffDetail;

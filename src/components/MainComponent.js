@@ -8,6 +8,7 @@ import Salary from "./SalaryComponent";
 import Department from "./DepartmentComponent";
 import StaffDetail from "./StaffItemComponent";
 import { connect } from "react-redux";
+import { addStaff } from "../redux/Action";
 
 const mapStateToProps = (state) => {
   return {
@@ -18,8 +19,26 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  // addComment: (dishId, rating, author, comment) =>
-  //   dispatch(addComment(dishId, rating, author, comment)),
+  addStaff: (
+    name,
+    department,
+    startDate,
+    doB,
+    salaryScale,
+    annualLeave,
+    overTime
+  ) =>
+    dispatch(
+      addStaff(
+        name,
+        department,
+        startDate,
+        doB,
+        salaryScale,
+        annualLeave,
+        overTime
+      )
+    ),
 });
 class Main extends Component {
   constructor(props) {
@@ -27,7 +46,7 @@ class Main extends Component {
     this.state = {
       staffs: STAFFS,
       departments: DEPARTMENTS,
-      selectedStaff: null,
+      // selectedStaff: null,
     };
     this.addStaff = this.addStaff.bind(this);
   }
@@ -41,8 +60,6 @@ class Main extends Component {
     this.setState({
       staffs: [...this.state.staffs, newStaff],
     });
-    console.log(newStaff);
-    console.log(this.state.staffs);
   };
 
   render() {
@@ -81,6 +98,12 @@ class Main extends Component {
           /> */}
           <Route exact path="/department" component={Department} />
           <Route exact path="/staff/:staffID" component={StaffsID} />
+          <Route
+            path="/staff"
+            component={() => (
+              <StaffDetail onAdd={this.addStaff} staffs={this.state.staffs} />
+            )}
+          />
           <Route exact path="/salary" component={Salary} />
           <Redirect to="/staff" />
         </Switch>
