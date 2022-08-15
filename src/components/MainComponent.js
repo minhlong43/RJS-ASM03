@@ -8,7 +8,7 @@ import Salary from "./SalaryComponent";
 import Department from "./DepartmentComponent";
 import StaffDetail from "./StaffItemComponent";
 import { connect } from "react-redux";
-import { addStaff } from "../redux/Action";
+import { staffNew } from "../redux/Action";
 
 const mapStateToProps = (state) => {
   return {
@@ -19,7 +19,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  addStaff: (
+  staffNew: (
     name,
     department,
     startDate,
@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch) => ({
     overTime
   ) =>
     dispatch(
-      addStaff(
+      staffNew(
         name,
         department,
         startDate,
@@ -101,7 +101,10 @@ class Main extends Component {
           <Route
             path="/staff"
             component={() => (
-              <StaffDetail onAdd={this.addStaff} staffs={this.state.staffs} />
+              <StaffDetail
+                addStaff={this.addStaff}
+                staffs={this.state.staffs}
+              />
             )}
           />
           <Route exact path="/salary" component={Salary} />

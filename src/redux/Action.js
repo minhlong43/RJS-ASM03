@@ -1,6 +1,6 @@
 import * as ActionTypes from "./ActionTypes";
 
-export const addStaff = (
+export const staffNew = (
   name,
   department,
   salaryScale,

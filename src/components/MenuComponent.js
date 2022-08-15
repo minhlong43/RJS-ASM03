@@ -17,7 +17,7 @@ import {
 import { STAFFS, DEPARTMENTS } from "../shared/staffs";
 import { NavLink } from "react-router-dom";
 import { LocalForm, Control, Errors } from "react-redux-form";
-import { addStaff } from "../redux/Action";
+import { staffNew } from "../redux/Action";
 
 class Menu extends Component {
   constructor(props) {
@@ -89,7 +89,7 @@ class Menu extends Component {
       image: "/assets/images/alberto.png",
     };
 
-    this.props.addStaff(newStaff);
+    this.props.staffNew(newStaff);
   };
 
   // handleSubmit(event) {
