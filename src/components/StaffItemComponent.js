@@ -2,6 +2,7 @@ import React from "react";
 import { Breadcrumb, BreadcrumbItem, CardImg, CardBody } from "reactstrap";
 import { Link } from "react-router-dom";
 import dateFormat from "dateformat";
+import { staffNew } from "../redux/Action";
 
 function StaffDetail(props) {
   if (props.staffs != null) {
@@ -18,7 +19,7 @@ function StaffDetail(props) {
           </div>
         </div>
         <div className="row">
-          <StaffItem staffs={props.staffs} />
+          <StaffItem staffs={props.staffs} staffNew={props.staffNew} />
         </div>
       </div>
     );

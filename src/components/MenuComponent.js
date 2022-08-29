@@ -19,6 +19,11 @@ import { NavLink } from "react-router-dom";
 import { LocalForm, Control, Errors } from "react-redux-form";
 import { staffNew } from "../redux/Action";
 
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !val || val.length <= len;
+const minLength = (len) => (val) => val && val.length >= len;
+const isNumber = (val) => !isNaN(Number(val));
+
 class Menu extends Component {
   constructor(props) {
     super(props);
@@ -76,36 +81,38 @@ class Menu extends Component {
     });
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    const newStaff = {
-      name: this.state.name,
-      doB: this.state.doB,
-      startDate: this.state.startDate,
-      department: this.state.department,
-      salaryScale: this.state.salaryScale,
-      annualLeave: this.state.annualLeave,
-      overTime: this.state.overTime,
-      image: "/assets/images/alberto.png",
-    };
-
-    this.props.staffNew(newStaff);
-  };
-
-  // handleSubmit(event) {
+  // handleSubmit = (event) => {
   //   event.preventDefault();
-  //   this.toggleModal();
-  //   this.props.addStaff(
-  //     this.props.id,
-  //     this.state.name,
-  //     this.state.department,
-  //     this.state.salaryScale,
-  //     this.state.doB,
-  //     this.state.startDate,
-  //     this.state.annualLeave,
-  //     this.state.overTime
-  //   );
-  // }
+  //   const newStaff = {
+  //     name: this.state.name,
+  //     doB: this.state.doB,
+  //     startDate: this.state.startDate,
+  //     department: this.state.department,
+  //     salaryScale: this.state.salaryScale,
+  //     annualLeave: this.state.annualLeave,
+  //     overTime: this.state.overTime,
+  //     image: "/assets/images/alberto.png",
+  //   };
+
+  //   this.props.staffNew(newStaff);
+  // };
+
+  handleSubmit(value) {
+    // value.preventDefault();
+    console.log("Current State is: " + JSON.stringify(this.state));
+    alert("Current State is: " + JSON.stringify(this.state));
+    this.toggleModal();
+    // this.props.onStaffNew(
+    //   this.props.id,
+    //   value.name,
+    //   value.department,
+    //   value.salaryScale,
+    //   value.doB,
+    //   value.startDate,
+    //   value.annualLeave,
+    //   value.overTime
+    // );
+  }
 
   validate(
     name,
@@ -225,25 +232,34 @@ class Menu extends Component {
                     Thêm nhân viên
                   </ModalHeader>
                   <ModalBody>
-                    <Form onSubmit={(value) => this.handleSubmit(value)}>
+                    <LocalForm onSubmit={(value) => this.handleSubmit(value)}>
                       {/* <Form> */}
                       <Row className="control-group">
                         <Label htmlFor="name" md={4}>
                           Họ tên:
                         </Label>
                         <Col md={8}>
-                          <Input
-                            type="text"
+                          <Control.text
+                            model=".name"
                             className="form-control"
                             id="name"
                             name="name"
-                            value={this.state.name}
-                            valid={errors.name === ""}
-                            invalid={errors.name !== ""}
-                            onBlur={this.handleBlur("name")}
-                            onChange={this.handleInput}
+                            validators={{
+                              required,
+                              minLength: minLength(3),
+                              maxLength: maxLength(30),
+                            }}
                           />
-                          <FormFeedback>{errors.name}</FormFeedback>
+                          <Errors
+                            className="text-danger"
+                            model=".name"
+                            show="touched"
+                            messages={{
+                              required: "Chưa điền thông tin! ",
+                              minLength: "Tên phải nhiều hơn 2 kí tự",
+                              maxLength: "Tên phải ít hơn 30 kí tự",
+                            }}
+                          />
                         </Col>
                       </Row>
                       <Row className="control-group">
@@ -251,18 +267,24 @@ class Menu extends Component {
                           Ngày sinh:
                         </Label>
                         <Col md={8}>
-                          <Input
+                          <Control.input
                             type="date"
-                            className="form-control mt-2"
+                            model=".doB"
+                            className="form-control"
                             id="doB"
                             name="doB"
-                            value={this.state.doB}
-                            valid={errors.doB === ""}
-                            invalid={errors.doB !== ""}
-                            onBlur={this.handleBlur("doB")}
-                            onChange={this.handleInput}
+                            validators={{
+                              required,
+                            }}
                           />
-                          <FormFeedback>{errors.doB}</FormFeedback>
+                          <Errors
+                            className="text-danger"
+                            model=".doB"
+                            show="touched"
+                            messages={{
+                              required: "Chưa điền thông tin!",
+                            }}
+                          />
                         </Col>
                       </Row>
                       <Row className="control-group">
@@ -270,19 +292,24 @@ class Menu extends Component {
                           Ngày bắt đầu làm:
                         </Label>
                         <Col md={8}>
-                          <Input
+                          <Control.input
                             type="date"
-                            className="form-control mt-2"
+                            model=".startDate"
+                            className="form-control"
                             id="startDate"
                             name="startDate"
-                            value={this.state.startDate}
-                            // value={this.state.tenState.startDate}
-                            valid={errors.startDate === ""}
-                            invalid={errors.startDate !== ""}
-                            onBlur={this.handleBlur("startDate")}
-                            onChange={this.handleInput}
+                            validators={{
+                              required,
+                            }}
                           />
-                          <FormFeedback>{errors.startDate}</FormFeedback>
+                          <Errors
+                            className="text-danger"
+                            model=".startDate"
+                            show="touched"
+                            messages={{
+                              required: "Chưa điền thông tin!",
+                            }}
+                          />
                         </Col>
                       </Row>
 
@@ -293,15 +320,13 @@ class Menu extends Component {
                         <Col md={8}>
                           <Control.select
                             model=".department"
+                            className="form-control"
                             id="department"
-                            className="form-control mt-2"
-                            value={this.state.department}
                             name="department"
-                            valid={errors.department === ""}
-                            invalid={errors.department !== ""}
-                            onBlur={this.handleBlur("department")}
-                            onChange={this.handleInput}
                             defaultValue="Sale"
+                            validators={{
+                              required,
+                            }}
                           >
                             <option>Sales</option>
                             <option>HR</option>
@@ -309,7 +334,14 @@ class Menu extends Component {
                             <option>Marketing</option>
                             <option>Finance</option>
                           </Control.select>
-                          <FormFeedback>{errors.department}</FormFeedback>
+                          <Errors
+                            className="text-danger"
+                            model=".department"
+                            show="touched"
+                            messages={{
+                              required: "Chưa điền thông tin!",
+                            }}
+                          />
                         </Col>
                       </Row>
 
@@ -318,18 +350,27 @@ class Menu extends Component {
                           Hệ số lương:
                         </Label>
                         <Col md={8}>
-                          <Input
-                            type="number"
-                            className="form-control mt-2"
+                          <Control.text
+                            model=".salaryScale"
+                            className="form-control"
                             id="salaryScale"
                             name="salaryScale"
-                            value={this.state.salaryScale}
-                            valid={errors.salaryScale === ""}
-                            invalid={errors.salaryScale !== ""}
-                            onBlur={this.handleBlur("salaryScale")}
-                            onChange={this.handleInput}
+                            validators={{
+                              required,
+                              isNumber,
+                              minLength: minLength(1),
+                            }}
                           />
-                          <FormFeedback>{errors.salaryScale}</FormFeedback>
+                          <Errors
+                            className="text-danger"
+                            model=".salaryScale"
+                            show="touched"
+                            messages={{
+                              required: "Chưa điền thông tin!",
+                              isNumber: "Hệ số lương là số!",
+                              minLength: "Hệ số lương lớn hơn 0!",
+                            }}
+                          />
                         </Col>
                       </Row>
 
@@ -338,18 +379,27 @@ class Menu extends Component {
                           Số ngày nghỉ còn lại:
                         </Label>
                         <Col md={8}>
-                          <Input
-                            type="number"
-                            className="form-control mt-2"
+                          <Control.text
+                            model=".annualLeave"
+                            className="form-control"
                             id="annualLeave"
                             name="annualLeave"
-                            value={this.state.annualLeave}
-                            valid={errors.annualLeave === ""}
-                            invalid={errors.annualLeave !== ""}
-                            onBlur={this.handleBlur("annualLeave")}
-                            onChange={this.handleInput}
+                            validators={{
+                              required,
+                              isNumber,
+                              minLength: minLength(1),
+                            }}
                           />
-                          <FormFeedback>{errors.annualLeave}</FormFeedback>
+                          <Errors
+                            className="text-danger"
+                            model=".annualLeave"
+                            show="touched"
+                            messages={{
+                              required: "Chưa điền thông tin!",
+                              isNumber: "Số ngày nghỉ còn lại là số!",
+                              minLength: "Chưa điền thông tin!",
+                            }}
+                          />
                         </Col>
                       </Row>
 
@@ -358,24 +408,33 @@ class Menu extends Component {
                           Số ngày tăng ca:
                         </Label>
                         <Col md={8}>
-                          <Input
-                            type="number"
-                            className="form-control mt-2"
+                          <Control.text
+                            model=".overTime"
+                            className="form-control"
                             id="overTime"
                             name="overTime"
-                            value={this.state.overTime}
-                            valid={errors.overTime === ""}
-                            invalid={errors.overTime !== ""}
-                            onBlur={this.handleBlur("overTime")}
-                            onChange={this.handleInput}
+                            validators={{
+                              required,
+                              isNumber,
+                              minLength: minLength(1),
+                            }}
                           />
-                          <FormFeedback>{errors.overTime}</FormFeedback>
+                          <Errors
+                            className="text-danger"
+                            model=".overTime"
+                            show="touched"
+                            messages={{
+                              required: "Chưa điền thông tin!",
+                              isNumber: "Số ngày tăng ca là số!",
+                              minLength: "Chưa điền thông tin!",
+                            }}
+                          />
                         </Col>
                       </Row>
                       <Button type="submit" color="primary">
                         Thêm
                       </Button>
-                    </Form>
+                    </LocalForm>
                   </ModalBody>
                 </Modal>
               </div>

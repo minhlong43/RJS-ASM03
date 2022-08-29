@@ -67,7 +67,7 @@ class Main extends Component {
       return (
         <StaffDetail
           staffs={
-            this.state.staffs.filter(
+            this.props.staffs.filter(
               (staffs) => staffs.id === parseInt(match.params.staffID, 10)
             )[0]
           }
@@ -84,7 +84,7 @@ class Main extends Component {
             path="/staff"
             component={() => (
               <Menu
-                staffs={this.state.staffs}
+                staffs={this.props.staffs}
                 onClick={(staffID) => this.onStaffSelect(staffID)}
               />
             )}
@@ -102,8 +102,9 @@ class Main extends Component {
             path="/staff"
             component={() => (
               <StaffDetail
-                addStaff={this.addStaff}
-                staffs={this.state.staffs}
+                staffs={this.props.staffs}
+                // addStaff={this.addStaff}
+                staffNew={this.props.staffNew}
               />
             )}
           />
