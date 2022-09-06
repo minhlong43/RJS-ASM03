@@ -1,23 +1,15 @@
 import React, { Component } from "react";
 import {
-  Card,
-  CardImg,
-  CardTitle,
   Button,
   Modal,
   ModalHeader,
   ModalBody,
-  Form,
-  Input,
   Label,
   Col,
-  FormFeedback,
   Row,
 } from "reactstrap";
 import { STAFFS, DEPARTMENTS } from "../shared/staffs";
-import { NavLink } from "react-router-dom";
 import { LocalForm, Control, Errors } from "react-redux-form";
-import { staffNew } from "../redux/Action";
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
@@ -49,12 +41,9 @@ class Menu extends Component {
         annualLeave: false,
         overTime: false,
       },
-      strSearch: "",
       modalOpen: false,
     };
 
-    // this.handleSearch = this.handleSearch.bind(this);
-    this.handleChange = this.handleChange.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.handleInput = this.handleInput.bind(this);
@@ -81,37 +70,22 @@ class Menu extends Component {
     });
   }
 
-  // handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const newStaff = {
-  //     name: this.state.name,
-  //     doB: this.state.doB,
-  //     startDate: this.state.startDate,
-  //     department: this.state.department,
-  //     salaryScale: this.state.salaryScale,
-  //     annualLeave: this.state.annualLeave,
-  //     overTime: this.state.overTime,
-  //     image: "/assets/images/alberto.png",
-  //   };
+  handleSubmit(e) {
+    // e.preventDefault();
 
-  //   this.props.staffNew(newStaff);
-  // };
-
-  handleSubmit(value) {
-    // value.preventDefault();
-    console.log("Current State is: " + JSON.stringify(this.state));
-    alert("Current State is: " + JSON.stringify(this.state));
-    this.toggleModal();
-    // this.props.onStaffNew(
-    //   this.props.id,
-    //   value.name,
-    //   value.department,
-    //   value.salaryScale,
-    //   value.doB,
-    //   value.startDate,
-    //   value.annualLeave,
-    //   value.overTime
-    // );
+    const newStaff = {
+      id: this.props.staffList.length,
+      name: this.state.name,
+      doB: this.state.doB,
+      department: this.state.department,
+      salaryScale: this.state.salaryScale,
+      startDate: this.state.startDate,
+      annualLeave: this.state.annualLeave,
+      overTime: this.state.overTime,
+      image: "/assets/images/alberto.png",
+    };
+    this.props.onStaff(newStaff);
+    console.log(newStaff);
   }
 
   validate(
@@ -151,16 +125,11 @@ class Menu extends Component {
     return errors;
   }
 
-  // handleSearch(event) {
-  //   event.preventDefault();
-  //   const strSearchs = this.state.strSearch;
-  //   // this.setState(strSearch);
-  //   console.log(strSearchs);
-  // }
-  handleChange(event) {
-    this.setState({ strSearch: event.target.value });
-  }
   render() {
+    const onAddStaff = (staff) => {
+      onAddStaff(staff);
+    };
+
     const errors = this.validate(
       this.state.name,
       this.state.department,
@@ -171,59 +140,13 @@ class Menu extends Component {
       this.state.startDate
     );
 
-    const menu = this.state.staffs
-      .filter((data) => {
-        if (this.state.strSearch === "") return data;
-        else if (data.name.toLowerCase().includes(this.state.strSearch))
-          return data;
-      })
-      .map((data) => {
-        return (
-          <div className="col-6 col-md-4 col-xl-2 mb-5" key={data.id}>
-            {/* <StaffDetail staffs={data} /> */}
-            <Card onClick={() => this.props.onClick(data.id)}>
-              <NavLink className="nav-link" to={`/staff/${data.id}`}>
-                <CardImg
-                  width="auto"
-                  height="200px"
-                  src={data.image}
-                  alt={data.name}
-                />
-              </NavLink>
-              <CardTitle>{data.name}</CardTitle>
-            </Card>
-          </div>
-        );
-      });
-
     return (
       <div className="container">
-        <div className="row">
-          <div className="col-4">
-            <h3>Nhân viên</h3>
-          </div>
-          <div className="col-8 mt-2">
-            <form className="form-group row" onSubmit={this.handleSearch}>
-              <div className="col-6">
-                <input
-                  value={this.state.strSearch}
-                  onChange={this.handleChange}
-                  type="text"
-                  className="form-control"
-                  placeholder="Tìm kiếm"
-                />
-              </div>
-
-              <div className="col-3">
-                {/* <button
-                  onClick={this.handleSearch}
-                  className="btn btn-success"
-                  type="submit"
-                >
-                  Search
-                </button> */}
-              </div>
-              <div className="col-3">
+        <div key={this.props.id} className="row">
+          <div className="col-12 mt-2">
+            <form className="form-group row">
+              {/* <div className="col-3"></div> */}
+              <div className="col-4">
                 <Button outline onClick={this.toggleModal}>
                   <span className="fa fa-pencil fa-lg"></span>Thêm nhân viên
                 </Button>
@@ -244,6 +167,7 @@ class Menu extends Component {
                             className="form-control"
                             id="name"
                             name="name"
+                            onChange={this.handleInput}
                             validators={{
                               required,
                               minLength: minLength(3),
@@ -272,6 +196,7 @@ class Menu extends Component {
                             model=".doB"
                             className="form-control"
                             id="doB"
+                            onChange={this.handleInput}
                             name="doB"
                             validators={{
                               required,
@@ -295,6 +220,7 @@ class Menu extends Component {
                           <Control.input
                             type="date"
                             model=".startDate"
+                            onChange={this.handleInput}
                             className="form-control"
                             id="startDate"
                             name="startDate"
@@ -322,6 +248,8 @@ class Menu extends Component {
                             model=".department"
                             className="form-control"
                             id="department"
+                            onChange={this.handleInput}
+                            value={this.state.department}
                             name="department"
                             defaultValue="Sale"
                             validators={{
@@ -354,6 +282,7 @@ class Menu extends Component {
                             model=".salaryScale"
                             className="form-control"
                             id="salaryScale"
+                            onChange={this.handleInput}
                             name="salaryScale"
                             validators={{
                               required,
@@ -383,6 +312,7 @@ class Menu extends Component {
                             model=".annualLeave"
                             className="form-control"
                             id="annualLeave"
+                            onChange={this.handleInput}
                             name="annualLeave"
                             validators={{
                               required,
@@ -412,6 +342,7 @@ class Menu extends Component {
                             model=".overTime"
                             className="form-control"
                             id="overTime"
+                            onChange={this.handleInput}
                             name="overTime"
                             validators={{
                               required,
@@ -441,7 +372,7 @@ class Menu extends Component {
             </form>
           </div>
         </div>
-        <div className="row">{menu}</div>
+        {/* <div className="row">{menu}</div> */}
       </div>
     );
   }

@@ -2,10 +2,9 @@ import React from "react";
 import { Breadcrumb, BreadcrumbItem, CardImg, CardBody } from "reactstrap";
 import { Link } from "react-router-dom";
 import dateFormat from "dateformat";
-import { staffNew } from "../redux/Action";
 
 function StaffDetail(props) {
-  if (props.staffs != null) {
+  if (props.staff != null) {
     return (
       <div className="container">
         <div className="row">
@@ -14,12 +13,12 @@ function StaffDetail(props) {
               <BreadcrumbItem>
                 <Link to="/staff">Nhân viên</Link>
               </BreadcrumbItem>
-              <BreadcrumbItem active>{props.staffs.name}</BreadcrumbItem>
+              <BreadcrumbItem active>{props.staff.name}</BreadcrumbItem>
             </Breadcrumb>
           </div>
         </div>
         <div className="row">
-          <StaffItem staffs={props.staffs} staffNew={props.staffNew} />
+          <StaffItem staff={props.staff} />
         </div>
       </div>
     );
@@ -28,30 +27,25 @@ function StaffDetail(props) {
   }
 }
 
-function StaffItem(data) {
-  if (data.staffs != null) {
+function StaffItem(staffs) {
+  if (staffs != null) {
     return (
-      <div className="conainer" key={data.id}>
+      <div className="container">
         <div className="col-12">
           <div className="row mb-5">
             <div className="col-4">
-              <CardImg
-                width="100%"
-                src={data.staffs.image}
-                alt={data.staffs.name}
-              />
+              <CardImg width="100%" src={staffs.image} alt={staffs.name} />
             </div>
-            <div className="col-8">
+            <div key={staffs.id} className="col-8">
               <CardBody>
-                <h4>Họ và tên: {data.staffs.name}</h4>
-                <p>Ngày sinh: {dateFormat(data.staffs.doB, "dd/mm/yy")}</p>
+                <h4>Họ và tên: {staffs.name}</h4>
+                <p>Ngày sinh: {dateFormat(staffs.doB, "dd/mm/yy")}</p>
                 <p>
-                  Ngày vào công ty:{" "}
-                  {dateFormat(data.staffs.startDate, "dd/mm/yy")}
+                  Ngày vào công ty: {dateFormat(staffs.startDate, "dd/mm/yy")}
                 </p>
-                <p>Phòng ban: {data.staffs.department.name}</p>
-                <p>Số ngày nghỉ còn lại: {data.staffs.annualLeave}</p>
-                <p>Số ngày đã làm thêm: {data.staffs.overTime}</p>
+                <p>Phòng ban: {staffs.department.name}</p>
+                <p>Số ngày nghỉ còn lại: {staffs.annualLeave}</p>
+                <p>Số ngày đã làm thêm: {staffs.overTime}</p>
               </CardBody>
             </div>
           </div>

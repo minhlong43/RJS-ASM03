@@ -8,6 +8,7 @@ import Salary from "./SalaryComponent";
 import Department from "./DepartmentComponent";
 import StaffDetail from "./StaffItemComponent";
 import { connect } from "react-redux";
+import StaffList from "../components/StaffListComponent";
 import { staffNew } from "../redux/Action";
 
 const mapStateToProps = (state) => {
@@ -48,13 +49,13 @@ class Main extends Component {
       departments: DEPARTMENTS,
       // selectedStaff: null,
     };
-    this.addStaff = this.addStaff.bind(this);
+    // this.addStaff = this.addStaff.bind(this);
   }
 
   onStaffSelect(staffID) {
     this.setState({ selectedStaff: staffID });
   }
-  addStaff = (staff) => {
+  onAddStaff = (staff) => {
     const id = Math.floor(Math.random() * 10000 + 1);
     const newStaff = { id, ...staff };
     this.setState({
@@ -68,7 +69,7 @@ class Main extends Component {
         <StaffDetail
           staffs={
             this.props.staffs.filter(
-              (staffs) => staffs.id === parseInt(match.params.staffID, 10)
+              (staffs) => staffs.id === parseInt(match.params.id, 10)
             )[0]
           }
         />
@@ -79,35 +80,29 @@ class Main extends Component {
       <div>
         <Header />
         <Switch>
-          <Route
+          {/* <Route
             exact
             path="/staff"
             component={() => (
               <Menu
                 staffs={this.props.staffs}
                 onClick={(staffID) => this.onStaffSelect(staffID)}
+                onAddStaff={this.onAddStaff}
               />
             )}
-          />
-          {/* <Route
+          /> */}
+          <Route
             exact
             path="/staff"
             component={() => (
-              <StaffDetail onAdd={this.addStaff} staffs={this.state.staffs} />
-            )}
-          /> */}
-          <Route exact path="/department" component={Department} />
-          <Route exact path="/staff/:staffID" component={StaffsID} />
-          <Route
-            path="/staff"
-            component={() => (
-              <StaffDetail
-                staffs={this.props.staffs}
-                // addStaff={this.addStaff}
-                staffNew={this.props.staffNew}
+              <StaffList
+                staff={this.state.staffs}
+                onAddStaff={this.onAddStaff}
               />
             )}
           />
+          <Route exact path="/staff/:id" component={StaffsID} />
+          <Route exact path="/department" component={Department} />
           <Route exact path="/salary" component={Salary} />
           <Redirect to="/staff" />
         </Switch>
