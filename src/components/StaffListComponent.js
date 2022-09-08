@@ -45,7 +45,7 @@ const StaffList = (props) => {
     props.onAddStaff(staff);
   };
 
-  const staff1 = searchStaff.map((staff) => {
+  const strSearch = searchStaff.map((staff) => {
     return (
       <div className="col-lg-2 col-md-4 col-6" key={staff.id}>
         <RenderStaffList staff={staff} onClick={props.onClick} />
@@ -86,7 +86,7 @@ const StaffList = (props) => {
         </div>
       </div>
       <div className="row" key={props.id}>
-        {staff1}
+        {strSearch}
       </div>
     </div>
   );

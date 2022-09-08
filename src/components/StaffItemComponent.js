@@ -17,8 +17,7 @@ function StaffDetail(props) {
             </Breadcrumb>
           </div>
         </div>
-        {/* <div className="row"> */}
-        {/* <StaffItem staff={props.staff} /> */}
+
         <div className="container">
           <div className="col-12">
             <div className="row mb-5">
@@ -47,41 +46,6 @@ function StaffDetail(props) {
         </div>
       </div>
       // </div>
-    );
-  } else {
-    return <div></div>;
-  }
-}
-
-function StaffItem(props) {
-  if (props.staffs != null) {
-    return (
-      <div className="container">
-        <div className="col-12">
-          <div className="row mb-5">
-            <div className="col-4">
-              <CardImg
-                width="100%"
-                src={props.staffs.image}
-                alt={props.staffs.name}
-              />
-            </div>
-            <div key={props.staffs.id} className="col-8">
-              <CardBody>
-                <h4>Họ và tên: {props.staffs.name}</h4>
-                <p>Ngày sinh: {dateFormat(props.staffs.doB, "dd/mm/yy")}</p>
-                <p>
-                  Ngày vào công ty:{" "}
-                  {dateFormat(props.staffs.startDate, "dd/mm/yy")}
-                </p>
-                <p>Phòng ban: {props.staffs.department.name}</p>
-                <p>Số ngày nghỉ còn lại: {props.staffs.annualLeave}</p>
-                <p>Số ngày đã làm thêm: {props.staffs.overTime}</p>
-              </CardBody>
-            </div>
-          </div>
-        </div>
-      </div>
     );
   } else {
     return <div></div>;

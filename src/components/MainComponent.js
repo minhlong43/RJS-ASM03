@@ -2,13 +2,12 @@ import React, { Component } from "react";
 import { DEPARTMENTS, STAFFS } from "../shared/staffs";
 import Footer from "./FooterComponent";
 import Header from "./HeaderComponent";
-import Menu from "./MenuComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import Salary from "./SalaryComponent";
 import Department from "./DepartmentComponent";
 import StaffDetail from "./StaffItemComponent";
+import StaffList from "./StaffListComponent";
 import { connect } from "react-redux";
-import StaffList from "../components/StaffListComponent";
 import { staffNew } from "../redux/Action";
 
 const mapStateToProps = (state) => {
@@ -79,17 +78,6 @@ class Main extends Component {
       <div>
         <Header />
         <Switch>
-          {/* <Route
-            exact
-            path="/staff"
-            component={() => (
-              <Menu
-                staffs={this.props.staffs}
-                onClick={(staffID) => this.onStaffSelect(staffID)}
-                onAddStaff={this.onAddStaff}
-              />
-            )}
-          /> */}
           <Route
             exact
             path="/staff"
