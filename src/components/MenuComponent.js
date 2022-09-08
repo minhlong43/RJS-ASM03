@@ -88,57 +88,57 @@ class Menu extends Component {
     console.log(newStaff);
   }
 
-  validate(
-    name,
-    department,
-    salaryScale,
-    doB,
-    startDate,
-    annualLeave,
-    overTime
-  ) {
-    const errors = {
-      name: "",
-      department: "",
-      salaryScale: "",
-      annualLeave: "",
-      overTime: "",
-      doB: "",
-      startDate: "",
-    };
-    if (this.state.touched.name && name.length < 3)
-      errors.name = "Nhập tên nhân viên !";
-    else if (this.state.touched.name && name.length > 50)
-      errors.name = "Nhập tên nhân viên !";
-    if (this.state.touched.department && department.length < 1)
-      errors.department = "Nhập phòng ban !";
-    if (this.state.touched.startDate && startDate.length < 1)
-      errors.startDate = "Nhập ngày bắt đầu làm việc !";
-    if (this.state.touched.doB && doB.length < 1) errors.doB = "Nhập ngày sinh";
-    if (this.state.touched.salaryScale && salaryScale.length < 1)
-      errors.salaryScale = "Nhập hệ số lương!";
-    if (this.state.touched.annualLeave && annualLeave.length < 0)
-      errors.annualLeave = "Nhập số ngày nghỉ còn lại !";
-    if (this.state.touched.overTime && overTime.length < 0)
-      errors.overTime = "Nhập số giờ tăng ca !";
+  // validate(
+  //   name,
+  //   department,
+  //   salaryScale,
+  //   doB,
+  //   startDate,
+  //   annualLeave,
+  //   overTime
+  // ) {
+  //   const errors = {
+  //     name: "",
+  //     department: "",
+  //     salaryScale: "",
+  //     annualLeave: "",
+  //     overTime: "",
+  //     doB: "",
+  //     startDate: "",
+  //   };
+  //   if (this.state.touched.name && name.length < 3)
+  //     errors.name = "Nhập tên nhân viên !";
+  //   else if (this.state.touched.name && name.length > 50)
+  //     errors.name = "Nhập tên nhân viên !";
+  //   if (this.state.touched.department && department.length < 1)
+  //     errors.department = "Nhập phòng ban !";
+  //   if (this.state.touched.startDate && startDate.length < 1)
+  //     errors.startDate = "Nhập ngày bắt đầu làm việc !";
+  //   if (this.state.touched.doB && doB.length < 1) errors.doB = "Nhập ngày sinh";
+  //   if (this.state.touched.salaryScale && salaryScale.length < 1)
+  //     errors.salaryScale = "Nhập hệ số lương!";
+  //   if (this.state.touched.annualLeave && annualLeave.length < 0)
+  //     errors.annualLeave = "Nhập số ngày nghỉ còn lại !";
+  //   if (this.state.touched.overTime && overTime.length < 0)
+  //     errors.overTime = "Nhập số giờ tăng ca !";
 
-    return errors;
-  }
+  //   return errors;
+  // }
 
   render() {
     const onAddStaff = (staff) => {
       onAddStaff(staff);
     };
 
-    const errors = this.validate(
-      this.state.name,
-      this.state.department,
-      this.state.salaryScale,
-      this.state.annualLeave,
-      this.state.overTime,
-      this.state.doB,
-      this.state.startDate
-    );
+    // const errors = this.validate(
+    //   this.state.name,
+    //   this.state.department,
+    //   this.state.salaryScale,
+    //   this.state.annualLeave,
+    //   this.state.overTime,
+    //   this.state.doB,
+    //   this.state.startDate
+    // );
 
     return (
       <div className="container">
@@ -249,7 +249,7 @@ class Menu extends Component {
                             className="form-control"
                             id="department"
                             onChange={this.handleInput}
-                            value={this.state.department}
+                            // value={this.state.department}
                             name="department"
                             defaultValue="Sale"
                             validators={{

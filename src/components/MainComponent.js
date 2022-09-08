@@ -47,9 +47,8 @@ class Main extends Component {
     this.state = {
       staffs: STAFFS,
       departments: DEPARTMENTS,
-      // selectedStaff: null,
     };
-    // this.addStaff = this.addStaff.bind(this);
+    this.onAddStaff = this.onAddStaff.bind(this);
   }
 
   onStaffSelect(staffID) {
